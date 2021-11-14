@@ -1,8 +1,11 @@
 import React from 'react';
 import SoftKey from './SoftKey';
+import { titleDocumentString } from './TextDocument';
 
 interface LocalProps {
   className?:string
+  viewDocumentTitle?:boolean
+  viewFoother?:boolean
 }
 
 interface LocalState {
@@ -121,6 +124,17 @@ export class SoftKeyProvider extends React.PureComponent<LocalProps, LocalState>
     });
   };
 
+  getCssStyleOnState = () => {
+    return {display: (this.props.viewFoother === false) ? 'none': 'block'}
+  }
+
+  changeTitileDocument = () => {
+    if (this.props.viewDocumentTitle){
+      const nav = titleDocumentString({left: this.state.leftText, center:this.state.centerText, right: this.state.rightText});
+      document.title = nav;
+    }
+  }
+
   render() {
     const context: SoftKeyContextProps = {
       setLeftCallback: this.setLeftCallback,
@@ -136,11 +150,12 @@ export class SoftKeyProvider extends React.PureComponent<LocalProps, LocalState>
       setSoftKeyCallbacks: this.setSoftKeyCallbacks,
       unregisterSoftKeys: this.unregisterSoftKeys
     };
+    this.changeTitileDocument();
 
     return (
       <SoftKeyContext.Provider value={context}>
         {this.props.children}
-        <footer className={this.props.className || ''}>
+        <footer className={this.props.className || ''} style={this.getCssStyleOnState()}>
           <SoftKey
             leftText={this.state.leftText}
             leftIcon={this.state.leftIcon}

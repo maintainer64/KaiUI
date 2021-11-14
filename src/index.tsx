@@ -1,7 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import { interceptionKeydown } from './utils/addonsWeb';
 import * as serviceWorker from './serviceWorker';
+
+interceptionKeydown();
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

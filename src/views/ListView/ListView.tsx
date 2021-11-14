@@ -3,6 +3,7 @@ import { ReactElements } from './../../utils/types'
 import ReactDOM from 'react-dom';
 import './ListView.scss';
 import classNames from 'classnames';
+import { EventListenerOnKeyDown, GetEventKey } from '../../utils/addonsWeb';
 
 interface LocalProps {
   isActive?: boolean;
@@ -52,7 +53,7 @@ const ListView = React.memo<LocalProps>(
           return;
         }
 
-        switch (e.key) {
+        switch (GetEventKey(e)) {
           case 'ArrowUp':
             // looping to bottom
             index = index - 1 >= 0 ? index - 1 : index;
@@ -73,8 +74,8 @@ const ListView = React.memo<LocalProps>(
 
     useEffect(
       () => {
-        document.addEventListener('keydown', handleKeyDown);
-        return () => document.removeEventListener('keydown', handleKeyDown);
+        document.addEventListener(EventListenerOnKeyDown, handleKeyDown);
+        return () => document.removeEventListener(EventListenerOnKeyDown, handleKeyDown);
       },
       [handleKeyDown]
     );

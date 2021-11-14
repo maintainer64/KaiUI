@@ -1,9 +1,11 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, useEffect, useRef } from 'react';
 import classnames from 'classnames';
 
 import './TextInput.scss';
+import { SoftKeyConsumer, SoftKeyManagerProps} from '../SoftKey/withSoftKeyManager';
 
-interface LocalProps {
+
+interface LocalProps{
   id?: string;
   focusClass?: string,
   label?: string,
@@ -12,15 +14,17 @@ interface LocalProps {
   forwardedRef?: any,
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void,
   enableTabSwitching?: boolean,
+  onlyClickChange?: boolean,
   initialValue?: string,
   placeholder?: string,
   isNumeric?: boolean,
   validationError?: string
 };
+type Props = LocalProps & SoftKeyManagerProps;
 
 const prefixCls = 'kai-text-input';
 
-const TextInput = React.memo<LocalProps>(
+const TextInput = React.memo<Props>(
   props => {
     const {
       id,
@@ -34,12 +38,17 @@ const TextInput = React.memo<LocalProps>(
       initialValue,
       placeholder,
       isNumeric,
+      softKeyManager,
+      onlyClickChange,
       validationError
     } = props;
 
+  const ref = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   const [caretPosition, setCaretPosition] = useState(0);
-  const [value, setValue] = useState((initialValue||''));
+  const [value, setValue] = useState(initialValue||'');
+
+  useEffect(() => {setValue(initialValue||'')}, [initialValue]);
 
   const handleKeyUp = (event) => {
     if (enableTabSwitching) {
@@ -57,6 +66,15 @@ const TextInput = React.memo<LocalProps>(
     setCaretPosition(event.target.selectionStart);
   };
 
+  function setFoucsOnInputRef(){
+    const input = ref.current;
+    input.focus();
+    // Without this, it will just focus at position 0
+    requestAnimationFrame(() => {
+      input.selectionStart = caretPosition;
+    });
+  }
+
   const handleChange = (event) => {
     setValue(event.target.value);
     if(onChange) {
@@ -65,15 +83,14 @@ const TextInput = React.memo<LocalProps>(
   };
 
   const handleFocusChange = (foc: boolean) => {
-    const input = forwardedRef.current;
     setIsFocused(foc);
     if (foc) {
       onFocusChange(index);
-      input.focus();
-      // Without this, it will just focus at position 0
-      requestAnimationFrame(() => {
-        input.selectionStart = caretPosition;
-      })
+      if (onlyClickChange){
+        softKeyManager.setCenterCallback(setFoucsOnInputRef);
+      } else {
+        setFoucsOnInputRef();
+      }
     }
   };
 
@@ -88,6 +105,7 @@ const TextInput = React.memo<LocalProps>(
 
   return (
     <div
+      ref={forwardedRef}
       id={id}
       tabIndex={0}
       className={itemCls}
@@ -96,7 +114,7 @@ const TextInput = React.memo<LocalProps>(
     >
       <label className={labelCls}>{validationError ? validationError : label}</label>
       <input
-        ref={forwardedRef}
+        ref={ref}
         type={isNumeric ? "tel": "text"}
         className={inputCls}
         onChange={handleChange}
@@ -109,5 +127,7 @@ const TextInput = React.memo<LocalProps>(
 });
 
 export default React.forwardRef((props:LocalProps, ref) => (
-  <TextInput forwardedRef={ref} {...props} />
+  <SoftKeyConsumer>
+    {context => <TextInput softKeyManager={context} forwardedRef={ref} {...props} />}
+  </SoftKeyConsumer>
 ));

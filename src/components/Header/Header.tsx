@@ -22,7 +22,7 @@ const Header = React.memo<LocalProps>(
 
 return (
       <header className={classNames(prefixCls, (className || ''))} style={{ background: backgroundColor}}>
-        {(imgSrc ? <img src={imgSrc} style={{height: "20px"}} /> : <h1 className="h1">{text}</h1>)}
+        {(imgSrc ? <img alt="logo-header" src={imgSrc} style={{height: "20px"}} /> : <h1 className="h1">{text}</h1>)}
       </header>
     );
   }

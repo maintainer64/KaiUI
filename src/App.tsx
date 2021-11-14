@@ -18,6 +18,7 @@ import ToastContext, { ToastContextProvider } from './contexts/toastContext';
 import './App.scss';
 import colors from './theme/colors.scss';
 import exampleIcon from './assets/example.png';
+import WrapperContent from './components/Wrappers/Content';
 
 function App() {
   const handleInputChange = newVal => {
@@ -31,8 +32,8 @@ function App() {
     return (
       <div className="App">
         <Header text="KaiUI" backgroundColor={colors.headerPurple} />
-        <SoftKeyProvider>
-          <div className="content">
+        <SoftKeyProvider viewDocumentTitle={false} viewFoother={true}>
+          <WrapperContent useFooter={true}>
             <TabView
               tabLabels={[
                 'CB Tab',
@@ -175,7 +176,7 @@ function App() {
                 <Button text="Show a toast" onClick={() => { showToast(toastValues[Math.round(Math.random() * 2)], 5000) }} />
               </ListView>
             </TabView>
-          </div>
+          </WrapperContent>
         </SoftKeyProvider>
       </div>
     );

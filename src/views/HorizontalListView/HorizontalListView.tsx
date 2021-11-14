@@ -2,6 +2,7 @@ import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import './HorizontalListView.scss';
 import classNames from 'classnames';
+import { EventListenerOnKeyDown, GetEventKey } from '../../utils/addonsWeb';
 
 const prefixCls = 'kai-horizontal-list-view';
 
@@ -46,7 +47,7 @@ const HorizontalListView = React.memo<any>(
           return;
         }
 
-        switch (e.key) {
+        switch (GetEventKey(e)) {
           case 'ArrowLeft':
             index = index - 1 >= 0 ? index - 1 : itemRefs.length - 1;
             setFocusToIndex(index);
@@ -71,8 +72,8 @@ const HorizontalListView = React.memo<any>(
 
     useEffect(
       () => {
-        document.addEventListener('keydown', handleKeyDown);
-        return () => document.removeEventListener('keydown', handleKeyDown);
+        document.addEventListener(EventListenerOnKeyDown, handleKeyDown);
+        return () => document.removeEventListener(EventListenerOnKeyDown, handleKeyDown);
       },
       [handleKeyDown]
     );

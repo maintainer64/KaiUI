@@ -2,6 +2,7 @@ import React from 'react';
 import { useFocus } from '../../hooks/useFocus';
 
 import './ArrowListItem.scss';
+import colors from '../../theme/colors.scss';
 import classNames from 'classnames';
 import { SoftKeyConsumer, SoftKeyManagerProps } from '../SoftKey/withSoftKeyManager';
 
@@ -11,6 +12,8 @@ interface LocalProps {
   primary: string;
   secondary?: string;
   focusClass?: string;
+  focusColor?: string;
+  arrowRight?: boolean;
   forwardedRef?: any;
   index?: number;
   onFocusChange?: (index: number) => void;
@@ -25,7 +28,9 @@ const ArrowListItem = React.memo<Props>(
       primary,
       secondary,
       focusClass,
+      focusColor,
       forwardedRef,
+      arrowRight,
       index,
       onFocusChange,
       onClick,
@@ -59,26 +64,29 @@ const ArrowListItem = React.memo<Props>(
         className={classNames(itemCls, focusedCls)}
         ref={forwardedRef}
         onClick={onClick}
+        style={{ backgroundColor: isFocused ? (focusColor || colors.defaultFocusColor) : colors.white }}
       >
         <div className={lineCls}>
           <span className={primaryCls}>{primary}</span>
           <label className={secondaryCls}>{secondary}</label>
         </div>
-        <div className={iconCls}>
-          <span className="kai-icon-arrow" />
-        </div>
+        {(arrowRight !== false) && (
+          <div className={iconCls}>
+            <span className="kai-icon-arrow" />
+          </div>
+        )}
       </div>
     );
   }
 );
 export default React.forwardRef((props: LocalProps, ref) => (
   <SoftKeyConsumer>
-    {context => (
+    {context => 
       <ArrowListItem
         softKeyManager={context}
         forwardedRef={ref}
         {...props}
       />
-    )}
+    }
   </SoftKeyConsumer>
 ));

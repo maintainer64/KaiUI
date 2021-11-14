@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import './OptionMenu.scss';
 import TextInput from "../TextInput/TextInput";
 import OptionItem from "./OptionItem";
+import { EventListenerOnKeyDown, GetEventKey } from "../../utils/addonsWeb";
 
 const prefixCls = 'kai-om';
 
@@ -59,8 +60,7 @@ const OptionMenu = React.memo<LocalProps>(
         if (!isActive) {
           return;
         }
-
-        switch(e.key) {
+        switch(GetEventKey(e)) {
           case 'ArrowUp':
             index = index > 0 ? --index : itemRefs.length - 1;
             setFocusToIndex(index);
@@ -83,9 +83,9 @@ const OptionMenu = React.memo<LocalProps>(
 
     useEffect(
       () => {
-        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener(EventListenerOnKeyDown, handleKeyDown);
 
-        return () => document.removeEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener(EventListenerOnKeyDown, handleKeyDown);
       }, [handleKeyDown]
     );
 

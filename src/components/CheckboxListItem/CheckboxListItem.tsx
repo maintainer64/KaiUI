@@ -78,12 +78,7 @@ const CheckboxListItem = React.memo<LocalProps>(props => {
 
   const handleInvertCheck = () => setChecked(wasChecked => !wasChecked);
 
-  const handleInputChange = (e) => {
-    setChecked(e.target.checked);
-    if(onInputChange) {
-      onInputChange(e.target.checked);
-    }
-  };
+  useEffect(() => {onInputChange && onInputChange(isChecked)}, [isChecked, onInputChange]);
 
   // We want to avoid losing focus on the parent element
   const handleCheckFocus = e => {
@@ -137,7 +132,7 @@ const CheckboxListItem = React.memo<LocalProps>(props => {
         type="checkbox"
         checked={isChecked}
         onFocus={handleCheckFocus}
-        onClick={handleInputChange}
+        onClick={handleInvertCheck}
       />
     </div>
   );

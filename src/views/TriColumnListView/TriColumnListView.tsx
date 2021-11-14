@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, ReactElement } from 'react';
 import './TriColumnListView.scss';
 import ScrollingListView from '../ScrollingListView/ScrollingListView';
 import { ReactElements } from '../../utils/types';
+import { EventListenerOnKeyDown, GetEventKey } from '../../utils/addonsWeb';
 
 const prefixCls = 'kai-tricol-view';
 
@@ -52,7 +53,7 @@ const TriColListView = React.memo<LocalProps>(
     const handleKeyDown = useCallback(
       e => {
         let index = activeTab;
-        switch (e.key) {
+        switch (GetEventKey(e)) {
           case 'ArrowLeft':
             index = index - 1 >= 0 ? index - 1 : 2;
             setActiveTab(index);
@@ -69,8 +70,8 @@ const TriColListView = React.memo<LocalProps>(
 
     useEffect( 
       () => {
-        document.addEventListener('keydown', handleKeyDown);
-        return () => document.removeEventListener('keydown', handleKeyDown);
+        document.addEventListener(EventListenerOnKeyDown, handleKeyDown);
+        return () => document.removeEventListener(EventListenerOnKeyDown, handleKeyDown);
       },
       [handleKeyDown]
     );

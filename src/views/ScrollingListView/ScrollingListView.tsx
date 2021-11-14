@@ -3,6 +3,7 @@ import './ScrollingListView.scss';
 import classNames from 'classnames';
 import BodyTextListItem from '../../components/BodyTextListItem/BodyTextListItem';
 import { ReactElements } from '../../utils/types';
+import { EventListenerOnKeyDown, GetEventKey } from '../../utils/addonsWeb';
 
 const prefixCls = 'kai-scroll-list-view';
 
@@ -40,7 +41,7 @@ const ScrollingListView = React.memo<LocalProps>(
           return;
         }
 
-        switch (e.key) {
+        switch (GetEventKey(e)) {
           case 'ArrowUp':
             index = index - 1 >= 0 ? index - 1 : index;
             setActiveItem(index);
@@ -60,8 +61,8 @@ const ScrollingListView = React.memo<LocalProps>(
 
     useEffect(
       () => {
-        document.addEventListener('keydown', handleKeyDown);
-        return () => document.removeEventListener('keydown', handleKeyDown);
+        document.addEventListener(EventListenerOnKeyDown, handleKeyDown);
+        return () => document.removeEventListener(EventListenerOnKeyDown, handleKeyDown);
       },
       [handleKeyDown]
     );

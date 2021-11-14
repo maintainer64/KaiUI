@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactEventHandler, useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import Tabs from '../../components/Tabs/Tabs';
 import Tab from '../../components/Tab/Tab';

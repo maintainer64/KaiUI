@@ -82,6 +82,7 @@ const IconListItem = React.memo<LocalProps>(
 
     return (
       <div
+        id={id}
         tabIndex={!disabled ? index : undefined}
         className={classNames(itemCls, disabledCls, (className || ''), focusedCls)}
         ref={forwardedRef}

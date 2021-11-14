@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+import { EventListenerOnKeyDown, GetEventKey } from '../../utils/addonsWeb';
 
 import './SoftKey.scss';
 
@@ -32,7 +33,7 @@ const Button = props => {
       renderedIcon = icon;
     }
     else if(icon.toString().indexOf("kai-") === -1) {
-      renderedIcon = <img src={icon} width={20} height={20}/>
+      renderedIcon = <img alt={"kai-key-icon"} src={icon} width={20} height={20}/>
     }
     else {
       renderedIcon = <span className={icon} />;
@@ -80,7 +81,7 @@ const SoftKey = React.memo<SoftKeyProps>(props => {
 
   const handleKeyDown = useCallback(
     e => {
-      switch (e.key) {
+      switch (GetEventKey(e)) {
         case 'SoftLeft':
           if(leftCallback) {
             leftCallback();
@@ -98,6 +99,7 @@ const SoftKey = React.memo<SoftKeyProps>(props => {
           }
           break;
         default:
+          console.log(e);
           break;
       }
     },
@@ -105,8 +107,8 @@ const SoftKey = React.memo<SoftKeyProps>(props => {
   );
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener(EventListenerOnKeyDown, handleKeyDown);
+    return () => document.removeEventListener(EventListenerOnKeyDown, handleKeyDown);
   }, [handleKeyDown]);
 
   return (
